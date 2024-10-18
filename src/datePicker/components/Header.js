@@ -1,10 +1,20 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import {View, TouchableOpacity, Text, Image, StyleSheet, Animated, I18nManager} from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  Image,
+  StyleSheet,
+  Animated,
+  I18nManager,
+} from 'react-native';
 
-import {useCalendar} from '../DatePicker';
+import { useCalendar } from '../DatePicker';
 
-const Header = ({changeMonth}) => {
+const Header = ({
+  changeMonth = () => null,
+}) => {
   const {
     options,
     disableDateChange,
@@ -15,17 +25,24 @@ const Header = ({changeMonth}) => {
     isGregorian,
     mode,
   } = useCalendar();
+  
   const [mainState, setMainState] = state;
   const style = styles(options);
   const [disableChange, setDisableChange] = useState(false);
+  
   const [
-    {lastDate, shownAnimation, hiddenAnimation},
+    { lastDate, shownAnimation, hiddenAnimation },
     changeMonthAnimation,
-  ] = utils.useMonthAnimation(mainState.activeDate, options.headerAnimationDistance, () =>
-    setDisableChange(false),
+  ] = utils.useMonthAnimation(
+    mainState.activeDate,
+    options.headerAnimationDistance,
+    () => setDisableChange(false),
   );
+  
   const prevDisable =
-    disableDateChange || (minimumDate && utils.checkArrowMonthDisabled(mainState.activeDate, true));
+    disableDateChange ||
+    (minimumDate && utils.checkArrowMonthDisabled(mainState.activeDate, true));
+    
   const nextDisable =
     disableDateChange ||
     (maximumDate && utils.checkArrowMonthDisabled(mainState.activeDate, false));
@@ -85,7 +102,10 @@ const Header = ({changeMonth}) => {
               activeOpacity={0.7}
               style={[
                 style.centerWrapper,
-                {marginRight: I18nManager.isRTL ? 0 : 5, marginLeft: I18nManager.isRTL ? 5 : 0},
+                {
+                  marginRight: I18nManager.isRTL ? 0 : 5,
+                  marginLeft: I18nManager.isRTL ? 5 : 0,
+                },
               ]}
               onPress={() =>
                 setMainState({
@@ -105,8 +125,12 @@ const Header = ({changeMonth}) => {
             utils.flexDirection,
             I18nManager.isRTL && style.reverseMonthYear,
           ]}>
-          <Text style={style.headerText}>{utils.getMonthYearText(lastDate).split(' ')[0]}</Text>
-          <Text style={style.headerText}>{utils.getMonthYearText(lastDate).split(' ')[1]}</Text>
+          <Text style={style.headerText}>
+            {utils.getMonthYearText(lastDate).split(' ')[0]}
+          </Text>
+          <Text style={style.headerText}>
+            {utils.getMonthYearText(lastDate).split(' ')[1]}
+          </Text>
           {mode === 'datepicker' && (
             <Text style={style.headerText}>
               {utils.toPersianNumber(utils.getTime(mainState.activeDate))}
@@ -120,7 +144,11 @@ const Header = ({changeMonth}) => {
         style={style.arrowWrapper}>
         <Image
           source={require('../../assets/arrow.png')}
-          style={[style.arrow, style.leftArrow, prevDisable && style.disableArrow]}
+          style={[
+            style.arrow,
+            style.leftArrow,
+            prevDisable && style.disableArrow,
+          ]}
         />
       </TouchableOpacity>
     </View>
@@ -202,12 +230,8 @@ const styles = (theme) =>
     },
   });
 
-Header.defaultProps = {
-  changeMonth: () => null,
-};
-
 Header.propTypes = {
   changeMonth: PropTypes.func,
 };
 
-export {Header};
+export { Header };
